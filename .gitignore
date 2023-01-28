@@ -1,0 +1,9 @@
+.env
+.env.example
+.env.local
+.env.staging
+env
+.vscode
+# Built Visual Studio Code Extensions
+*.vsix
+aap/data/secret.key
