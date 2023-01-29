@@ -1,8 +1,9 @@
+"""Logz Module"""
+import os
 import logging
-from rich.console import Console
 from rich.logging import RichHandler
 from rich.traceback import install
-import os
+
 install()
 
 def create_logger():

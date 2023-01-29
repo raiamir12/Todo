@@ -1,8 +1,10 @@
+"""User Model"""
 from app.db import db
 from werkzeug.security import hmac
 
 
 class UserModel(db.Model):
+    """User Model Clas"""
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -14,17 +16,20 @@ class UserModel(db.Model):
         self.password = password
 
     def save_to_db(self):
+        """Save Data"""
         db.session.add(self)
         db.session.commit()
 
     def check_password(self, password):
+        """Check Password"""
         return hmac.compare_digest(self.password, password)
 
     @classmethod
     def find_by_username(cls, username):
+        """Get Record By Name"""
         return cls.query.filter_by(username=username).first()
 
     @classmethod
     def find_by_id(cls, _id):
+        """Get Record By ID"""
         return cls.query.filter_by(id=_id).first()
-

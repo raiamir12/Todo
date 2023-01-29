@@ -1,11 +1,13 @@
+"""Item Resource"""
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required
 from app.models.item import ItemModel
 from app.util.logz import create_logger
-from app.util.ecryption import encrypted_response
+from app.util.encryption import encrypted_response
 
 
 class Item(Resource):
+    """Items Resource Class"""
     parser = reqparse.RequestParser()  # only allow price changes, no name changes allowed
     parser.add_argument('price', type=float, required=True,
                         help='This field cannot be left blank')
@@ -17,8 +19,9 @@ class Item(Resource):
 
     @jwt_required()  # Requires the token
     def get(self, name):
+        """Record Get By Name"""
         item = ItemModel.find_by_name(name)
-        self.logger.info(f'returning item: {item.json()}')
+        self.logger.info('returning item:%s', item.json())
         if item:
             return encrypted_response(item)
 
@@ -26,6 +29,7 @@ class Item(Resource):
 
     @jwt_required()
     def post(self, name):
+        """Save Record"""
         self.logger.info(f'parsed args: {Item.parser.parse_args()}')
 
         if ItemModel.find_by_name(name):
@@ -36,24 +40,24 @@ class Item(Resource):
 
         try:
             item.save_to_db()
-        except:
-            return {"message": "An error occurred inserting the item."}, 500
+        except :
+            return {'message': "An error occurred inserting the item."}, 500
 
-        return  encrypted_response(item) ,201   
-        
+        return  encrypted_response(item) ,201
+
 
     @jwt_required()
     def delete(self, name):
-
+        """Delete Record"""
         item = ItemModel.find_by_name(name)
         if item:
             item.delete_from_db()
 
         return encrypted_response({'message': 'item has been deleted'}),200
-   
 
     @jwt_required()
     def put(self, name):
+        """Update Record"""
         # Create or Update
         data = Item.parser.parse_args()
         item = ItemModel.find_by_name(name)
@@ -68,16 +72,18 @@ class Item(Resource):
         # if item:
         #     data=encrypted_response(item)
 
-        return  encrypted_response(item) 
-
+        return  encrypted_response(item)
 
 class ItemList(Resource):
+    """Items List Class"""
     @jwt_required()
     def get(self):
+        """Get Item List"""
 
         return encrypted_response({'items': [item.json() for item in ItemModel.query.all()]})
-          
+
         # return {
-        #     'items': [item.json() for item in ItemModel.query.all()]}  
+#     'items': [item.json() for item in ItemModel.query.all()]}
         # More pythonic
-        ##return {'items': list(map(lambda x: x.json(), ItemModel.query.all()))} #Alternate Lambda way
+        ##return {'items': list(map(lambda x: x.json(),
+        #  ItemModel.query.all()))} #Alternate Lambda way

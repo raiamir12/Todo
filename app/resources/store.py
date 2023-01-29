@@ -1,16 +1,18 @@
+"""Store Resource"""
 from flask_restful import Resource
-from app.models.store import StoreModel
 from flask_jwt_extended import jwt_required
+from app.models.store import StoreModel
 from app.util.logz import create_logger
-from app.util.ecryption import encrypted_response
+from app.util.encryption import encrypted_response
 
 
 class Store(Resource):
-
+    """Store Resource Class"""
     def __init__(self):
         self.logger = create_logger()
 
     def get(self, name):
+        """Get Record BY Name"""
         store = StoreModel.find_by_name(name)
         if store:
             return encrypted_response(store)
@@ -18,8 +20,9 @@ class Store(Resource):
 
     @jwt_required()  # Requires the token
     def post(self, name):
+        """Save Data """
         if StoreModel.find_by_name(name):
-            return {'message': "A store with name '{}' already exists.".format(name)}, 400
+            return {f"message": "A store with name '{name}' already exists."}, 400
 
         store = StoreModel(name)
         try:
@@ -31,6 +34,7 @@ class Store(Resource):
 
     @jwt_required()  # Requires the token
     def delete(self, name):
+        """Delete Data"""
         store = StoreModel.find_by_name(name)
         if store:
             store.delete_from_db()
@@ -39,6 +43,9 @@ class Store(Resource):
 
 
 class StoreList(Resource):
+    """StoreList Class"""
     def get(self):
+        """Get List Data"""
         return encrypted_response( {'stores': [store.json() for store in StoreModel.query.all()]})
-        # return {'stores': list(map(lambda x: x.json(), StoreModel.query.all()))} #Alternate Lambda way
+        # return {'stores': list(map(lambda x: x.json(), StoreModel.query.all()))}
+        #  #Alternate Lambda way

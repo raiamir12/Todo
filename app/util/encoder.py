@@ -1,9 +1,12 @@
+"""EndCode Module"""
 import json
 from sqlalchemy.ext.declarative import DeclarativeMeta
 
 class AlchemyEncoder(json.JSONEncoder):
+    """Alchemy Encoder Class"""
 
     def default(self, obj):
+        """Encoder Default"""
         if isinstance(obj.__class__, DeclarativeMeta):
             # an SQLAlchemy class
             fields = {}
