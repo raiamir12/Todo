@@ -5,9 +5,9 @@ from flask import jsonify
 from flask_jwt_extended import create_access_token, jwt_required
 from flask_jwt_extended import current_user
 from app.models.user import UserModel
-from app.util.encoder import AlchemyEncoder
-from app.util.logz import create_logger
-from app.util.encryption import encrypted_response
+from app.utils.encoder import AlchemyEncoder
+from app.utils.logs import create_logger
+from app.utils.encryption import encrypted_response
 
 
 class User(Resource):

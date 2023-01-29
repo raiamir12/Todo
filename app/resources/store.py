@@ -2,8 +2,8 @@
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required
 from app.models.store import StoreModel
-from app.util.logz import create_logger
-from app.util.encryption import encrypted_response
+from app.utils.logs import create_logger
+from app.utils.encryption import encrypted_response
 
 
 class Store(Resource):
