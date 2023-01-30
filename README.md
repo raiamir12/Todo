@@ -52,7 +52,7 @@ flask run
 
 ## Encrypt Response
 
-1. I make a function with name of deccryp_message()
+1. I make a function with name of decrypt_message()
 2. decrypt_message receive string then decode that string 
 3. After decodeded string response will be returned.
    
